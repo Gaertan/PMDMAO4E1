@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -17,12 +18,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,11 +33,15 @@ public class MainActivity extends AppCompatActivity {
     private Bitmap drawBitmap;
     private Canvas canvas;
     private Path path;
+
+    private ArrayList<Path> paths = new ArrayList<Path>();
+    private ArrayList<Path> undonePaths = new ArrayList<Path>();
     private Paint drawBitmapPaint;
     private RelativeLayout rl;
     private CustomView customView;
     private Paint paint;
-
+    private Button buttonGuardar;
+    private Button buttonBorrar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +62,25 @@ public class MainActivity extends AppCompatActivity {
         paint.setStrokeJoin(Paint.Join.ROUND);
         paint.setStrokeCap(Paint.Cap.ROUND);
         paint.setStrokeWidth(20);
+
+
+        buttonGuardar = findViewById(R.id.buttonGuardar);
+        buttonBorrar = findViewById(R.id.buttonBorrar);
+
+        buttonGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guardar();
+            }
+        });
+
+        buttonBorrar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                borrarCanvas();
+            }
+        });
+
     }
 
     public class CustomView extends View {
@@ -138,27 +164,11 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         paint.setXfermode(null);
         int itemId = item.getItemId();
-        if (itemId == R.id.erase) {
-            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-        } else if (itemId == R.id.DELETE) {
-
-        } else if (itemId == R.id.draw) {
-            paint.setXfermode(null);
-        } else if (itemId == R.id.Save) {
-            String pattern = "mm ss";
-            SimpleDateFormat formatter = new SimpleDateFormat(pattern);
-            String time = formatter.format(new Date());
-            String path = ("/d-codepages" + time + ".png");
-
-            File file = new File(Environment.getExternalStorageDirectory() + path);
-
-            try {
-                drawBitmap.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
-                Toast.makeText(this, "File Saved ::" + path, Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                Toast.makeText(this, "ERROR" + e.toString(), Toast.LENGTH_SHORT).show();
-            }
+        if (itemId == R.id.action_settings_canvas) {
+          //  cambiarSizeSettings();
+            return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -169,9 +179,44 @@ public class MainActivity extends AppCompatActivity {
         customView.invalidate();
     }
 
-    private void guardar(){}
+    private void guardar(){
 
-    private void cambiarSizeSettings(){}
+        String pattern = "mm ss";
+        SimpleDateFormat formatter = new SimpleDateFormat(pattern);
+        String time = formatter.format(new Date());
+        String path = ("/d-codepages" + time + ".png");
+
+        File file = new File(Environment.getExternalStorageDirectory() + path);
+
+        try {
+            drawBitmap.compress(Bitmap.CompressFormat.PNG, 100, new FileOutputStream(file));
+            Toast.makeText(this, "File Saved ::" + path, Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "ERROR" + e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+   // private void cambiarSizeSettings(){        Intent intent = new Intent(this, SettingsCanvasActivity.class);
+  //      startActivityForResult(intent, REQUEST_SETTINGS_CANVAS);}
+
+    private static final int REQUEST_SETTINGS_CANVAS = 1;
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_SETTINGS_CANVAS) {
+            if (resultCode == RESULT_OK) {
+                int canvasSize = data.getIntExtra("canvasSize", 0);
+                // Aquí puedes utilizar el valor de canvasSize
+                Toast.makeText(this, "Tamaño de canvas seleccionado: " + canvasSize, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
 
 }

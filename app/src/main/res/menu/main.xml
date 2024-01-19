@@ -4,6 +4,7 @@
     tools:context="com.example.pmdmao4e1.MainActivity" >
 
     <item
+        android:id="@+id/action_settings_canvas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:title="@string/config_canvas_literal" />
