@@ -96,9 +96,17 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onDraw(Canvas canvas) {
-            super.onDraw(canvas);
-            canvas.drawBitmap(drawBitmap, 0, 0, drawBitmapPaint);
+          //  super.onDraw(canvas);
+          //  canvas.drawBitmap(drawBitmap, 0, 0, drawBitmapPaint);
+           // canvas.drawPath(path, paint);
+
+            for (Path p : paths) {
+                canvas.drawPath(p, paint);
+            }
             canvas.drawPath(path, paint);
+
+
+
         }
 
         private void touchStart(float x, float y) {
@@ -126,25 +134,53 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public boolean onTouchEvent(MotionEvent event) {
-            float x = event.getX();
-            float y = event.getY();
+            float touchX = event.getX();
+            float touchY = event.getY();
 
-            switch (event.getAction()) {
+            switch (event.getAction()){
                 case MotionEvent.ACTION_DOWN:
-                    touchStart(x, y);
+                    touch_start(touchX, touchY);
                     invalidate();
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    touchMove(x, y);
+                    touch_move(touchX, touchY);
                     invalidate();
                     break;
                 case MotionEvent.ACTION_UP:
-                    touchUp();
+                    touch_up();
                     invalidate();
                     break;
+                default:
+                    return false;
             }
             return true;
         }
+
+
+        //TOUCHES
+        private void touch_start(float x, float y) {
+            undonePaths.clear();
+            path.reset();
+            path.moveTo(x, y);
+            mX = x;
+            mY = y;
+        }
+        private void touch_move(float x, float y) {
+            float dx = Math.abs(x - mX);
+            float dy = Math.abs(y - mY);
+            if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
+                path.quadTo(mX, mY, (x + mX)/2, (y + mY)/2);
+                mX = x;
+                mY = y;
+            }
+        }
+        private void touch_up() {
+            path.lineTo(mX, mY);
+            canvas.drawPath(path, paint);
+            paths.add(path);
+            path = new Path();
+        }
+
 
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -217,6 +253,28 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (!paths.isEmpty()) {
+            undo();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    public void undo() {
+        if (paths.size() > 0) {
+            undonePaths.add(paths.remove(paths.size() - 1));
+           customView.invalidate();
+        }
+    }
+
+    public void redo() {
+        if (undonePaths.size() > 0) {
+            paths.add(undonePaths.remove(undonePaths.size() - 1));
+            customView.invalidate();
+        }
+    }
 
 
 }
