@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         if (itemId == R.id.erase) {
             paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         } else if (itemId == R.id.DELETE) {
-            customView = new CustomView(this);
+
         } else if (itemId == R.id.draw) {
             paint.setXfermode(null);
         } else if (itemId == R.id.Save) {
@@ -161,4 +161,17 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void borrarCanvas(){
+        path.reset();
+        drawBitmap = Bitmap.createBitmap(customView.getWidth(), customView.getHeight(), Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(drawBitmap);
+        customView.invalidate();
+    }
+
+    private void guardar(){}
+
+    private void cambiarSizeSettings(){}
+
+
 }

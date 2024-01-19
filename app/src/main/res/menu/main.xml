@@ -4,28 +4,8 @@
     tools:context="com.example.pmdmao4e1.MainActivity" >
 
     <item
-        android:id="@+id/draw"
-        android:icon="@android:drawable/ic_menu_edit"
-        android:orderInCategory="100"
-        android:title="DRAW"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/erase"
-        android:icon="@android:drawable/ic_input_delete"
-        android:orderInCategory="100"
-        android:title="ERASE"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/Save"
-        android:icon="@android:drawable/ic_menu_save"
-        android:orderInCategory="100"
-        android:title="SAVE"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/DELETE"
-        android:icon="@android:drawable/ic_menu_delete"
-        android:orderInCategory="100"
-        android:title="DELETE"
-        app:showAsAction="always" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/config_canvas_literal" />
 
 </menu>
