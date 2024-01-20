@@ -3,6 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.pmdmao4e1.MainActivity" >
 
+
+
+
+
+    <item
+        android:id="@+id/undo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/undo_literal" />
+    <item
+        android:id="@+id/redo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/redo_literal" />
     <item
         android:id="@+id/action_settings_canvas"
         android:layout_width="wrap_content"

@@ -3,4 +3,9 @@
     <string name="config_canvas_literal">config canvas</string>
     <string name="guardar_literal">guardar</string>
     <string name="borrar_literal">borrar</string>
+    <string name="undo_literal">deshacer</string>
+    <string name="redo_literal">rehacer</string>
+    <string name="canvas_size_literal">tamaño de canvas</string>
+    <string name="confirmar_literal">confirmar</string>
+    <string name="stroke_size_literal">tamaño del trazo</string>
 </resources>
